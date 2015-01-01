@@ -120,13 +120,13 @@ try:
 			elif event.type == KEYDOWN:
 				hadEvent = True			
 				if event.key == K_RIGHT or event.key == ord('d'):
-					leftRight += 0.2
+					leftRight += 0.1
 				if event.key == K_LEFT or event.key == ord('a'):
-					leftRight -= 0.2
+					leftRight -= 0.1
 				if event.key == K_UP or event.key == ord('w'):
-					upDown += 0.2
+					upDown += 0.02
 				if event.key == K_DOWN or event.key == ord('x'):
-					upDown -= 0.2
+					upDown -= 0.02
 				if event.key == K_ESCAPE:
 					pygame.event.post(pygame.event.Event(QUIT))
 
@@ -135,12 +135,16 @@ try:
 					driveRight = 1.0 - (2.0 * leftRight)
 				elif leftRight < -0.05: #turning left
 					driveLeft =  1.0 + (2.0 * leftRight)
+
+				print 'Drive Right %f, Drive Left %f, Max Power %f, UpDown %f' % (driveRight, driveLeft, maxPower, upDown)
 				
-				print 'driveRight %f' % (driveRight)
-				print 'driveLeft %f' % (driveLeft)
-		
-				PBR.SetMotor1(driveRight * maxPower)
-				PBR.SetMotor2(-driveLeft * maxPower)
+				if upDown >= 0:
+					PBR.SetMotor1(driveRight * maxPower )
+					PBR.SetMotor2(-driveLeft * maxPower)
+				else:
+					PBR.SetMotor1(driveRight * maxPower * -1)
+					PBR.SetMotor2(-driveLeft * maxPower * -1)
+
 
 		PBR.SetLed(PBR.GetEpo())
 		playSurface.fill(blackColour)
